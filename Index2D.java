@@ -40,7 +40,7 @@ public class Index2D implements Pixel2D {
 
     @Override
     public double distance2D(Pixel2D p2) {
-        if (Objects.isNull(p2)) {
+        if (p2 == null) {
             throw new RuntimeException("p2 is null");
         }
 

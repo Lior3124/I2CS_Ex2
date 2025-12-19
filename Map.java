@@ -10,68 +10,119 @@ import java.io.Serializable;
 public class Map implements Map2D, Serializable{
 
     // edit this class below
+
+    private int [][] map;
 	/**
 	 * Constructs a w*h 2D raster map with an init value v.
-	 * @param w
-	 * @param h
-	 * @param v
+	 * @param w - the width of the underlying 2D array.
+	 * @param h - the height of the underlying 2D array.
+	 * @param v - the init value of all the entries in the 2D array.
 	 */
-	public Map(int w, int h, int v) {init(w, h, v);}
+	public Map(int w, int h, int v) {
+        init(w, h, v);
+    }
+
 	/**
 	 * Constructs a square map (size*size).
-	 * @param size
+	 * @param size - the width and the height of the underlying 2d square array
 	 */
-	public Map(int size) {this(size,size, 0);}
+	public Map(int size) {
+        this(size,size, 0);
+    }
 	
 	/**
 	 * Constructs a map from a given 2D array.
-	 * @param data
+	 * @param data - 2D array that will represent the Map
 	 */
 	public Map(int[][] data) {
 		init(data);
 	}
+
+    /**
+     * Constructs a 2D array of ints, filled with a given value
+     *
+     * @param w the width of the underlying 2D array.
+     * @param h the height of the underlying 2D array.
+     * @param v the init value of all the entries in the 2D array.
+     *
+     * Sets map with the given width and height and loop over all the indexes and fills each index with the given value v
+     */
 	@Override
 	public void init(int w, int h, int v) {
-
+        map = new int[w][h];
+        for(int i = 0; i < w; i++){
+            for(int j = 0; j < h; j++){
+                map[i][j] = v;
+            }
+        }
 	}
+
+    /**
+     * Constructs a 2D array of ints from a given array
+     * @param arr a 2D int array.
+     * @throws if the given array is empty, null or ragged
+     *
+     * First, checks if the array is null or the length is zero(empty) and then check if each collum has the same length as the first
+     * than goes over the given array and puts each value in its index in map
+     */
 	@Override
 	public void init(int[][] arr) {
-
+        if(arr == null || arr.length == 0){
+            throw new RuntimeException("Array is null");
+        }
+        int check_ragged = arr[0].length;
+        for(int i = 1; i < arr.length; i++){
+            if(arr[i].length != check_ragged){
+                throw new RuntimeException("Array is ragged");
+            }
+        }
+        for(int i = 0; i < arr.length; i++){
+            for(int j = 0; j < check_ragged; j++){
+                map[i][j] = arr[i][j];
+            }
+        }
 	}
+
 	@Override
 	public int[][] getMap() {
 		int[][] ans = null;
 
 		return ans;
 	}
+
 	@Override
 	public int getWidth() {
         int ans = -1;
 
         return ans;
     }
+
 	@Override
 	public int getHeight() {
         int ans = -1;
 
         return ans;
     }
+
 	@Override
 	public int getPixel(int x, int y) {
         int ans = -1;
 
         return ans;
     }
+
 	@Override
 	public int getPixel(Pixel2D p) {
         int ans = -1;
 
         return ans;
 	}
+
 	@Override
 	public void setPixel(int x, int y, int v) {
 
     }
+
 	@Override
 	public void setPixel(Pixel2D p, int v) {
 
@@ -127,6 +178,7 @@ public class Map implements Map2D, Serializable{
 
         return ans;
     }
+
 	@Override
 	/** 
 	 * Fills this map with the new color (new_v) starting from p.
@@ -148,6 +200,7 @@ public class Map implements Map2D, Serializable{
 
 		return ans;
 	}
+
     @Override
     public Map2D allDistance(Pixel2D start, int obsColor, boolean cyclic) {
         Map2D ans = null;  // the result.

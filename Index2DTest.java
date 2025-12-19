@@ -74,7 +74,7 @@ public class Index2DTest {
     }
 
     /**
-     * Tests the ToString method in Index2D
+     * Tests the ToString method in Index2D, should return "(x,y)"
      */
     @Test
     void test_ToString(){
