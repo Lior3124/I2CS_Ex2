@@ -26,7 +26,6 @@ public class Index2D implements Pixel2D {
         this._y = other.getY();
     }
 
-
     @Override
     public int getX() {
 
@@ -53,7 +52,7 @@ public class Index2D implements Pixel2D {
     @Override
     public String toString() {
         String ans = null;
-        ans =   "(" + this._x + ", " + this._y + ")";
+        ans =   "(" + this._x + "," + this._y + ")";
         return ans;
     }
 
