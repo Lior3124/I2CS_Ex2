@@ -79,7 +79,7 @@ public interface Map2D {
 
     /**
      * This method returns true if and only if this Map2D has the same dimensions as p.
-     * @param p
+     * @param p a given map
      * @return true if and only if this Map2D has the same dimensions as p.
      */
     public boolean sameDimensions(Map2D p);

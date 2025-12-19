@@ -83,73 +83,169 @@ public class Map implements Map2D, Serializable{
         }
 	}
 
+    /**
+     * makes a deep copy of the underlying 2D array
+     * @return a deep copy of the underline matrix.
+     *
+     * makes a new 2D array and copies each value of this array to the new array
+     */
 	@Override
 	public int[][] getMap() {
 		int[][] ans = null;
-
+        for(int i = 0; i < this.map.length; i++){
+            for(int j = 0; j < this.map[i].length; j++){
+                ans[i][j] = this.map[i][j];
+            }
+        }
 		return ans;
 	}
 
+    /**
+     * @return the width of the map
+     * the width of the map is the x value of the array constructor
+     * int[][] new arr = new int[x][y]
+     * (the number of columns)
+     */
 	@Override
 	public int getWidth() {
         int ans = -1;
-
+        ans = map.length;
         return ans;
     }
 
+    /**
+     * @return the height of the map
+     * the height of the map is the y value of the array constructor
+     * int[][] new arr = new int[x][y]
+     *(the number of rows)
+     */
 	@Override
 	public int getHeight() {
         int ans = -1;
-
+        ans = map[0].length;
         return ans;
     }
 
+    /**
+     * @param x the x coordinate
+     * @param y the y coordinate
+     * @return the value of the map at the given coordinates
+     * the value is map[x][y], but first it check if the coordinates are inside the map
+     */
 	@Override
 	public int getPixel(int x, int y) {
         int ans = -1;
-
+        if(x<this.map.length && y<this.map[0].length){
+            ans = map[x][y];
+        }
         return ans;
     }
 
+    /**
+     * @param p a Index2D representing a point in the map
+     * @return the value of the map at the given point(Index2D)
+     * the value is map[p.x][p.y], but first it check if the coordinates are inside the map
+     */
 	@Override
 	public int getPixel(Pixel2D p) {
         int ans = -1;
-
+        int x = p.getX();
+        int y = p.getY();
+        if(x<this.map.length && y<this.map[0].length) {
+            ans = map[x][y];
+        }
         return ans;
 	}
 
+    /**
+     * @param x the x coordinate
+     * @param y the y coordinate
+     * @param v the value that will be assigned to map in the given coordinates.
+     * first it check if the coordinates are inside the map
+     * and then assigns map[x][y] to v
+     */
 	@Override
 	public void setPixel(int x, int y, int v) {
-
+        if(x<this.map.length && y<this.map[0].length) {
+            map[x][y] = v;
+        }
     }
 
+    /**
+     * @param p a Index2D representing a point in the map
+     * @param v the value that will be assigned to map in the given point(Index2D).
+     * first it check if the coordinates are inside the map
+     * and then assigns map[p.x][p.y] to v
+     */
 	@Override
 	public void setPixel(Pixel2D p, int v) {
-
+        int x = p.getX();
+        int y = p.getY();
+        if(x<this.map.length && y<this.map[0].length) {
+            map[x][y] = v;
+        }
 	}
 
+    /**
+     * @param p a Index2D representing a point
+     * @return true if the point(Index2D) is inside the map and false if isn't
+     * finds the height and width of this map and check if p.x and p.y are higher than width and height of the map(respectively)
+     * if then the point(Index2D) is not inside
+     */
     @Override
     public boolean isInside(Pixel2D p) {
         boolean ans = true;
-
+        int height = this.map[0].length;
+        int width = this.map.length;
+        if(p.getX()>width || p.getY()>height){
+            ans = false;
+        }
         return ans;
     }
 
+    /**
+     * @param p a given map
+     * @return true if p and this map have the same dimensions, otherwise false
+     * finds this maps height and width and then compares it to p.getHeight and p.getWidth
+     */
     @Override
     public boolean sameDimensions(Map2D p) {
         boolean ans = false;
-
+        int height = this.map[0].length;
+        int width = this.map.length;
+        if(p.getWidth() ==width && p.getHeight()== height){
+            return true;
+        }
         return ans;
     }
 
+    /**
+     * @param p - the map that should be added to this map (just in case they have the same dimensions).
+     * if this map and p have the same dimensions add each value at the indexes of p to the values at the same indexes in this map
+     */
     @Override
     public void addMap2D(Map2D p) {
-
+        if(this.sameDimensions(p)){
+            for(int i = 0; i < this.map.length; i++){
+                for(int j = 0; j < this.map[i].length; j++){
+                    this.map[i][j]  = this.map[i][j] + p.getPixel(i,j);
+                }
+            }
+        }
     }
 
+    /**
+     * @param scalar - a number to multiply the map(matrix) by
+     * goes through each value at this map and multiplies it by teh given scalar
+     */
     @Override
     public void mul(double scalar) {
-
+        for(int i = 0; i < this.map.length; i++){
+            for(int j = 0; j < this.map[i].length; j++){
+                double new_value =  scalar*this.map[i][j];
+                this.map[i][j] = (int) new_value;
+            }
+        }
     }
 
     @Override

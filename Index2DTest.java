@@ -13,7 +13,7 @@ public class Index2DTest {
     Index2D p1 = new Index2D(0,0);
     Index2D p2 = new Index2D(2,2);
     Index2D p3 = new Index2D(2,5);
-    Index2D p4 = new Index2D(-10,7);
+    Index2D p4 = new Index2D(10,7);
 
     /**
      * Tests that the copy Constructor of Index2D works
@@ -41,7 +41,7 @@ public class Index2DTest {
     void test_getX() {
         assertEquals(0,p1.getX());
         assertEquals(2,p2.getY());
-        assertEquals(-10,p4.getX());
+        assertEquals(10,p4.getX());
     }
 
     /**
@@ -60,7 +60,7 @@ public class Index2DTest {
     @Test
     void test_distance2D() {
         assertEquals(Math.sqrt(2*2+2*2), p1.distance2D(p2));
-        assertEquals(2*Math.sqrt(37), p4.distance2D(p3));
+        assertEquals(2*Math.sqrt(17), p4.distance2D(p3));
         assertEquals(3, p2.distance2D(p3));
     }
 
@@ -80,7 +80,7 @@ public class Index2DTest {
     void test_ToString(){
         String expected1 = "(0,0)";
         String expected2 = "(2,2)";
-        String expected3 = "(-10,7)";
+        String expected3 = "(10,7)";
         assertEquals(expected1, p1.toString());
         assertEquals(expected2, p2.toString());
         assertEquals(expected3, p4.toString());
@@ -94,7 +94,7 @@ public class Index2DTest {
         Index2D p1_copy = new Index2D(0,0);
         Index2D p2_copy = new Index2D(2,2);
         Index2D p3_copy = new Index2D(2,5);
-        Index2D p4_copy = new Index2D(-10,7);
+        Index2D p4_copy = new Index2D(10,7);
 
         assertTrue(p1.equals(p1_copy));
         assertTrue(p2.equals(p2_copy));
@@ -109,7 +109,7 @@ public class Index2DTest {
     void test_equals2(){
         assertFalse(p2.equals(null));
         assertFalse(p2.equals("hello"));
-        assertFalse(p4.equals("(10,-7)"));
+        assertFalse(p4.equals("(10,7)"));
         assertFalse(p4.equals(10));
     }
 }
