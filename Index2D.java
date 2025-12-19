@@ -1,12 +1,30 @@
 package assignments.Ex2;
 
 public class Index2D implements Pixel2D {
+
+    private int _x;
+    private int _y;
+
+    /**
+     * Standard Constructor
+     * @param w - x value(int)
+     * @param h - y value(int)
+     */
     public Index2D(int w, int h) {
-        ;
+        this._x = w;
+        this._y = h;
     }
+
+    /**
+     * Copy Constructor
+     * @param other - Original Point
+     */
     public Index2D(Pixel2D other) {
-        ;
+        this._x = other.getX();
+        this._y = other.getY();
     }
+
+
     @Override
     public int getX() {
 
