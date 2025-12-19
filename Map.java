@@ -76,9 +76,10 @@ public class Map implements Map2D, Serializable{
                 throw new RuntimeException("Array is ragged");
             }
         }
+        this.map = new int[arr.length][check_ragged];
         for(int i = 0; i < arr.length; i++){
             for(int j = 0; j < check_ragged; j++){
-                map[i][j] = arr[i][j];
+                this.map[i][j] = arr[i][j];
             }
         }
 	}
@@ -268,10 +269,27 @@ public class Map implements Map2D, Serializable{
 
     }
 
+    /**
+     * @param ob the reference object with which to compare.
+     * @return true if the two maps are equals(have the same dimension and values) otherwise false
+     * first uses sameDimensions to check both dimensions and then loops over all the indexes to check that all the values are the same
+     */
     @Override
     public boolean equals(Object ob) {
         boolean ans = false;
-
+        if(ob instanceof Map2D){
+            if(!(this.sameDimensions((Map2D)ob))){
+                return false;
+            }
+            for(int i = 0; i < this.map.length; i++){
+                for(int j = 0; j < this.map[i].length; j++){
+                    if(this.getPixel(i,j) != ((Map2D) ob).getPixel(i,j)){
+                        return false;
+                    }
+                }
+            }
+            return true;
+        }
         return ans;
     }
 
