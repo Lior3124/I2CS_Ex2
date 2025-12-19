@@ -93,6 +93,7 @@ public class Map implements Map2D, Serializable{
 	@Override
 	public int[][] getMap() {
 		int[][] ans = null;
+        ans = new int[map.length][map[0].length];
         for(int i = 0; i < this.map.length; i++){
             for(int j = 0; j < this.map[i].length; j++){
                 ans[i][j] = this.map[i][j];
@@ -110,7 +111,7 @@ public class Map implements Map2D, Serializable{
 	@Override
 	public int getWidth() {
         int ans = -1;
-        ans = map.length;
+        ans = map[0].length;
         return ans;
     }
 
@@ -123,7 +124,7 @@ public class Map implements Map2D, Serializable{
 	@Override
 	public int getHeight() {
         int ans = -1;
-        ans = map[0].length;
+        ans = map.length;
         return ans;
     }
 
@@ -136,8 +137,8 @@ public class Map implements Map2D, Serializable{
 	@Override
 	public int getPixel(int x, int y) {
         int ans = -1;
-        if(x<this.map.length && y<this.map[0].length){
-            ans = map[x][y];
+        if(x<this.map[0].length && y<this.map.length){
+            ans = this.map[y][x];
         }
         return ans;
     }
@@ -152,8 +153,8 @@ public class Map implements Map2D, Serializable{
         int ans = -1;
         int x = p.getX();
         int y = p.getY();
-        if(x<this.map.length && y<this.map[0].length) {
-            ans = map[x][y];
+        if(x<this.map[0].length && y<this.map.length) {
+            ans = map[y][x];
         }
         return ans;
 	}
@@ -167,8 +168,8 @@ public class Map implements Map2D, Serializable{
      */
 	@Override
 	public void setPixel(int x, int y, int v) {
-        if(x<this.map.length && y<this.map[0].length) {
-            map[x][y] = v;
+        if(x<this.map[0].length && y<this.map.length) {
+            map[y][x] = v;
         }
     }
 
@@ -182,8 +183,8 @@ public class Map implements Map2D, Serializable{
 	public void setPixel(Pixel2D p, int v) {
         int x = p.getX();
         int y = p.getY();
-        if(x<this.map.length && y<this.map[0].length) {
-            map[x][y] = v;
+        if(x<this.map[0].length && y<this.map.length) {
+            map[y][x] = v;
         }
 	}
 
@@ -196,8 +197,8 @@ public class Map implements Map2D, Serializable{
     @Override
     public boolean isInside(Pixel2D p) {
         boolean ans = true;
-        int height = this.map[0].length;
-        int width = this.map.length;
+        int height = this.map.length;
+        int width = this.map[0].length;
         if(p.getX()>width || p.getY()>height){
             ans = false;
         }
@@ -212,8 +213,8 @@ public class Map implements Map2D, Serializable{
     @Override
     public boolean sameDimensions(Map2D p) {
         boolean ans = false;
-        int height = this.map[0].length;
-        int width = this.map.length;
+        int height = this.map.length;
+        int width = this.map[0].length;
         if(p.getWidth() ==width && p.getHeight()== height){
             return true;
         }
