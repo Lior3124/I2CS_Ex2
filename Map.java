@@ -257,7 +257,19 @@ public class Map implements Map2D, Serializable{
 
     @Override
     public void drawCircle(Pixel2D center, double rad, int color) {
+        if(this.isInside(center)) {
+            for (int i = 0; i < this.map.length; i++) {
+                for (int j = 0; j < this.map[i].length; j++) {
+                    Index2D p = new Index2D(i, j);
+                    if (center.distance2D(p) < rad) {
+                        this.map[i][j] = color;
+                    }
+                }
 
+            }
+        }else{
+            throw new RuntimeException("Not inside this circle");
+        }
     }
 
     @Override

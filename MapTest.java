@@ -102,8 +102,8 @@ class MapTest {
                 {1,2,3,4},
                 {2,3,4,}
         };
-     Assertions.assertThrows(RuntimeException.class, () -> {_m0 = new Map(null);});
-     Assertions.assertThrows(RuntimeException.class, () -> {_m0 = new Map(empty);});
+        Assertions.assertThrows(RuntimeException.class, () -> {_m0 = new Map(null);});
+        Assertions.assertThrows(RuntimeException.class, () -> {_m0 = new Map(empty);});
         Assertions.assertThrows(RuntimeException.class, () -> {_m0 = new Map(ragged);});
     }
 
@@ -260,5 +260,76 @@ class MapTest {
         map2.mul(2);
         assertEquals(new_map2,map2);
     }
+
+    /**
+     * Test drawing a circle of a certain color inside a map(one regular test, one where the radius is 1 and one where the radius is zero)
+     */
+    @Test
+    void test_circle(){
+        Index2D p1 = new Index2D(2,2);
+        int[][] circle1 = {
+                {0,0,0,0,0},
+                {0,0,0,0,0},
+                {0,0,0,0,0},
+                {0,0,0,0,0},
+                {0,0,0,0,0}
+        };
+        Map circle_map1 = new Map(circle1);
+        map1.drawCircle(p1,0,1);
+        assertEquals(circle_map1,map1);
+
+        int[][] circle3 = {
+                {0,0,0,0,0},
+                {0,0,0,0,0},
+                {0,0,1,0,0},
+                {0,0,0,0,0},
+                {0,0,0,0,0}
+        };
+        Map circle_map3 = new Map(circle3);
+        map1.drawCircle(p1,1,1);
+        assertEquals(circle_map3,map1);
+
+        int[][] circle2 = {
+                {0,0,0,0,0},
+                {0,1,1,1,0},
+                {0,1,1,1,0},
+                {0,1,1,1,0},
+                {0,0,0,0,0}
+        };
+        Map circle_map2 = new Map(circle2);
+        map1.drawCircle(p1,2,1);
+
+        assertEquals(circle_map2,map1);
+
+    }
+
+    /**
+     * Test the drawing of a circle inside a map, but the given center is outside the map(throws runtime exception)
+     */
+    @Test
+    void test_circle2(){
+        Index2D p1 = new Index2D(2,3);
+        Assertions.assertThrows(RuntimeException.class, () -> {map2.drawCircle(p1,2,1);});
+    }
+
+    /**
+     * Test the drawing of a circle inside a map, when the center is the corner of the map
+     */
+    @Test
+    void test_circle3(){
+        Index2D p1 = new Index2D(0,0);
+        int[][] circle1 = {
+                {1,1,1,0,0},
+                {1,1,1,0,0},
+                {1,1,1,0,0},
+                {0,0,0,0,0},
+                {0,0,0,0,0}
+        };
+        Map circle_map1 = new Map(circle1);
+        map1.drawCircle(p1,3,1);
+        assertEquals(circle_map1,map1);
+    }
+
+
 
 }
