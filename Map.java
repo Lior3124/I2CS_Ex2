@@ -279,7 +279,25 @@ public class Map implements Map2D, Serializable{
 
     @Override
     public void drawRect(Pixel2D p1, Pixel2D p2, int color) {
+        if(this.isInside(p1) && this.isInside(p2)){
+            int smallerX =p1.getX();
+            int biggerX=p2.getX();
+            if(p1.getY()>p2.getX()){
+                smallerX = p2.getX();
+                biggerX = p1.getX();
 
+            } else if (p1.getX()<p2.getX()) {
+                smallerX = p1.getX();
+                biggerX = p2.getX();
+            }
+            for(int i = 0; i < this.map.length; i++){
+                for(int j = smallerX; j <= biggerX; j++){
+                    if((p1.getY()>=i && p2.getY()<=i)||(p1.getY()<=i && p2.getY()>=i)){
+                        this.map[i][j] = color;
+                    }
+                }
+            }
+        }
     }
 
     /**

@@ -278,6 +278,9 @@ class MapTest {
         map1.drawCircle(p1,0,1);
         assertEquals(circle_map1,map1);
 
+        //reset map1
+        map1 = new Map(5,5,0);
+
         int[][] circle3 = {
                 {0,0,0,0,0},
                 {0,0,0,0,0},
@@ -288,6 +291,9 @@ class MapTest {
         Map circle_map3 = new Map(circle3);
         map1.drawCircle(p1,1,1);
         assertEquals(circle_map3,map1);
+
+        //reset map1
+        map1 = new Map(5,5,0);
 
         int[][] circle2 = {
                 {0,0,0,0,0},
@@ -330,6 +336,82 @@ class MapTest {
         assertEquals(circle_map1,map1);
     }
 
+
+    @Test
+    void test_rect1(){
+        int[][] rect1 = {
+                {0,0,0,0,0},
+                {0,1,1,1,0},
+                {0,1,1,1,0},
+                {0,0,0,0,0},
+                {0,0,0,0,0}
+        };
+        Map rect_map1 = new Map(rect1);
+        Index2D p1 = new Index2D(1,1);
+        Index2D p2 = new Index2D(3,2);
+        map1.drawRect(p1,p2,1);
+        assertEquals(rect_map1,map1);
+
+        //reset map1
+        map1 = new Map(5,5,0);
+
+        map1.drawRect(p2,p1,1);
+        assertEquals(rect_map1,map1);
+
+        //reset map1
+        map1 = new Map(5,5,0);
+
+        int[][] rect2 = {
+                {1,0,0,0,0},
+                {1,0,0,0,0},
+                {1,0,0,0,0},
+                {1,0,0,0,0},
+                {1,0,0,0,0}
+        };
+        Map rect2_map = new  Map(rect2);
+        Index2D p3 = new Index2D(0,0);
+        Index2D p4 = new Index2D(0,4);
+        map1.drawRect(p3,p4,1);
+        assertEquals(rect2_map,map1);
+
+        //reset map1
+        map1 = new Map(5,5,0);
+        map1.drawRect(p4,p3,1);
+        assertEquals(rect2_map,map1);
+
+        //reset map1
+        map1 = new Map(5,5,0);
+
+        int[][] rect3 = {
+                {0,0,0,0,0},
+                {0,0,0,0,0},
+                {0,0,0,0,0},
+                {0,0,0,0,0},
+                {1,1,1,1,1}
+        };
+        Map rect3_map = new  Map(rect3);
+        Index2D p5 = new Index2D(0,4);
+        Index2D p6 = new Index2D(4,4);
+        map1.drawRect(p5,p6,1);
+        assertEquals(rect3_map,map1);
+
+        //reset map1
+        map1 = new Map(5,5,0);
+
+        int[][] rect4 = {
+                {1,0,0,0,0},
+                {0,0,0,0,0},
+                {0,0,0,0,0},
+                {0,0,0,0,0},
+                {0,0,0,0,0}
+        };
+        Map rect4_map = new  Map(rect4);
+        Index2D p7 = new Index2D(0,0);
+        Index2D p8 = new Index2D(0,0);
+        map1.drawRect(p7,p8,1);
+        assertEquals(rect4_map,map1);
+
+    }
 
 
 }
