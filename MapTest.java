@@ -499,5 +499,34 @@ class MapTest {
 
     }
 
+    @Test
+    void test_rescale(){
+        int[][] test1 = {
+                {1,2,3,4},
+                {5,6,7,8},
+                {9,10,11,12},
+                {13,14,15,16},
+        };
+        int[][] result1 = {
+                {1,3},
+                {9,11}
+        };
+        Map test_1 = new Map(test1);
+        Map result_1 = new Map(result1);
+        test_1.rescale(0.5,0.5);
+        assertEquals(result_1,test_1);
+
+        result_1.rescale(2,2);
+        int[][] result2 = {
+                {1,0,3,0},
+                {0,0,0,0},
+                {9,0,11,0},
+                {0,0,0,0}
+        };
+        Map result_2 = new Map(result2);
+        assertEquals(result_2,result_1);
+
+    }
+
 
 }
