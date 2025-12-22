@@ -211,6 +211,18 @@ class MapTest {
         assertFalse(map2.isInside(p2));
         assertTrue(map1.isInside(p2));
         assertTrue(map3.isInside(p3));
+
+        int[][] new_arr ={
+                {0,0,0,0},
+                {0,0,0,0},
+                {0,0,0,0},
+                {0,0,0,0}
+        };
+        Map2D new_map = new Map(new_arr);
+
+        Index2D new_p1 = new Index2D(-1,0);
+
+        assertFalse(map1.isInside(new_p1));
     }
 
     /**
@@ -413,8 +425,11 @@ class MapTest {
 
     }
 
+    /**
+     * Test the fill function on a not cyclic matrix
+     */
     @Test
-    void test_fillcyclic(){
+    void test_fillNotCyclic(){
         int[][] test1 = {
                 {0,0,0,0,0},
                 {0,1,1,1,0},
@@ -461,8 +476,26 @@ class MapTest {
         int num3 =  result_2.fill(p1,1,false);
         assertEquals(test_3,result_2);
         assertEquals(2,num3);
+    }
 
-
+    @Test
+    void test_fillCyclic(){
+        int[][] test1 = {
+                {1,0,0,0,0},
+                {1,1,1,1,0},
+                {0,2,0,0,0},
+        };
+        int[][] result1 = {
+                {1,5,5,5,5},
+                {1,1,1,1,5},
+                {5,2,5,5,5},
+        };
+        Map test_1 = new Map(test1);
+        Map result_1 = new Map(result1);
+        Index2D p1 = new Index2D(2,2);
+        int num1 =test_1.fill(p1,5,true);
+        assertEquals(9,num1);
+        assertEquals(result_1,test_1);
 
     }
 

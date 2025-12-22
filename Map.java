@@ -199,7 +199,7 @@ public class Map implements Map2D, Serializable{
         boolean ans = true;
         int height = this.map.length;
         int width = this.map[0].length;
-        if(p.getX()>width || p.getY()>height){
+        if(p.getX()>width || p.getY()>height || p.getX()<0 || p.getY()<0){
             ans = false;
         }
         return ans;
@@ -337,7 +337,6 @@ public class Map implements Map2D, Serializable{
 
     public int floodFill(Pixel2D xy, int new_v, int old_v, boolean cyclic) {
         int ans =0;
-        if(!cyclic){
             if(!(this.isInside(xy))){           // if point is outside map do nothing
                 return 0;
             }
@@ -351,21 +350,37 @@ public class Map implements Map2D, Serializable{
             ans ++;
             //recursive call to each side(Up,Down,Left,Right)\
             Index2D p_right = new Index2D(xy.getX()+1,xy.getY());
-            ans = ans + floodFill(p_right,new_v,old_v,cyclic);
+            if(cyclic){
+                p_right = new Index2D((xy.getX()+1)%this.getWidth(),xy.getY());
+            }
+            if(this.isInside(p_right) &&  this.getPixel(p_right) == old_v) {
+                ans = ans + floodFill(p_right, new_v, old_v, cyclic);
+            }
 
             Index2D p_left = new Index2D(xy.getX()-1,xy.getY());
-            ans = ans + floodFill(p_left,new_v,old_v,cyclic);
+            if(cyclic){
+                p_left = new Index2D((xy.getX()-1+this.getWidth())%this.getWidth(),xy.getY());
+            }
+            if(this.isInside(p_left) &&  this.getPixel(p_left) == old_v) {
+                ans = ans + floodFill(p_left, new_v, old_v, cyclic);
+            }
 
             Index2D p_up = new Index2D(xy.getX(),xy.getY()+1);
-            ans = ans + floodFill(p_up,new_v,old_v,cyclic);
+            if(cyclic){
+                p_up = new Index2D(xy.getX(),(xy.getY()+1)%this.getHeight());
+            }
+            if(this.isInside(p_up) &&  this.getPixel(p_up) == old_v) {
+                ans = ans + floodFill(p_up, new_v, old_v, cyclic);
+            }
 
             Index2D p_down = new Index2D(xy.getX(),xy.getY()-1);
-            ans = ans + floodFill(p_down,new_v,old_v,cyclic);
+            if(cyclic){
+                p_down = new Index2D(xy.getX(),(xy.getY()-1+this.getHeight())%this.getHeight());
+            }
+            if(this.isInside(p_down) &&  this.getPixel(p_down) == old_v) {
+                ans = ans + floodFill(p_down, new_v, old_v, cyclic);
+            }
 
-        }
-        else {
-
-        }
         return ans;
     }
 
