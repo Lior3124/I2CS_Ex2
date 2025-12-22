@@ -413,5 +413,58 @@ class MapTest {
 
     }
 
+    @Test
+    void test_fillcyclic(){
+        int[][] test1 = {
+                {0,0,0,0,0},
+                {0,1,1,1,0},
+                {0,1,1,1,0},
+                {0,0,0,0,0},
+                {0,0,0,0,0}
+        };
+        Map test_1 = new Map(test1);
+        Index2D p1 = new Index2D(2,2);
+        int num1 =test_1.fill(p1,0,false);
+        assertEquals(6,num1);
+        assertEquals(test_1,map1);
+
+
+        int[][] test2 = {
+                {0,0,0,0,0},
+                {0,1,1,1,0},
+                {0,1,0,1,0},
+                {0,1,0,1,0},
+                {0,1,1,1,0},
+        };
+        Map test_2 = new Map(test2);
+        int num2 = test_2.fill(p1,5,false);
+        assertEquals(2,num2);
+
+        int[][] result2 = {
+                {0,0,0,0,0},
+                {0,1,1,1,0},
+                {0,1,5,1,0},
+                {0,1,5,1,0},
+                {0,1,1,1,0},
+        };
+        Map result_2 = new Map(result2);
+        assertEquals(result_2,test_2);
+
+        int[][] test3 = {
+                {0,0,0,0,0},
+                {0,1,1,1,0},
+                {0,1,1,1,0},
+                {0,1,1,1,0},
+                {0,1,1,1,0},
+        };
+        Map test_3 = new Map(test3);
+        int num3 =  result_2.fill(p1,1,false);
+        assertEquals(test_3,result_2);
+        assertEquals(2,num3);
+
+
+
+    }
+
 
 }

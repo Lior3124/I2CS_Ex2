@@ -330,10 +330,44 @@ public class Map implements Map2D, Serializable{
 	 * https://en.wikipedia.org/wiki/Flood_fill
 	 */
 	public int fill(Pixel2D xy, int new_v,  boolean cyclic) {
-		int ans = -1;
+        int old_v = this.getPixel(xy);
 
-		return ans;
+		return floodFill(xy,new_v,old_v,cyclic);
 	}
+
+    public int floodFill(Pixel2D xy, int new_v, int old_v, boolean cyclic) {
+        int ans =0;
+        if(!cyclic){
+            if(!(this.isInside(xy))){           // if point is outside map do nothing
+                return 0;
+            }
+            if(this.getPixel(xy) != old_v){     // if point doesn't have the same color do nothing
+                return 0;
+            }
+            if(this.getPixel(xy) == new_v){
+                return 0;                       //if point already is the new color do nothing
+            }
+            this.setPixel(xy, new_v);           // change the color of the point
+            ans ++;
+            //recursive call to each side(Up,Down,Left,Right)\
+            Index2D p_right = new Index2D(xy.getX()+1,xy.getY());
+            ans = ans + floodFill(p_right,new_v,old_v,cyclic);
+
+            Index2D p_left = new Index2D(xy.getX()-1,xy.getY());
+            ans = ans + floodFill(p_left,new_v,old_v,cyclic);
+
+            Index2D p_up = new Index2D(xy.getX(),xy.getY()+1);
+            ans = ans + floodFill(p_up,new_v,old_v,cyclic);
+
+            Index2D p_down = new Index2D(xy.getX(),xy.getY()-1);
+            ans = ans + floodFill(p_down,new_v,old_v,cyclic);
+
+        }
+        else {
+
+        }
+        return ans;
+    }
 
 	@Override
 	/**
