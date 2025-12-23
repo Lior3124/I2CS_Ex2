@@ -501,6 +501,7 @@ class MapTest {
 
     @Test
     void test_rescale(){
+
         int[][] test1 = {
                 {1,2,3,4},
                 {5,6,7,8},
@@ -526,7 +527,57 @@ class MapTest {
         Map result_2 = new Map(result2);
         assertEquals(result_2,result_1);
 
+        int[][] test4 = {
+                {1,2},
+                {5,6}
+        };
+        int[][] test3 = {
+                {1,0,2,0},
+                {0,0,0,0},
+                {5,0,6,0},
+                {0,0,0,0}
+        };
+        Map test_3 = new Map(test3);
+        Map test_4 = new Map(test4);
+        test_3.rescale(0.5,0.5);
+        assertEquals(test_3,test_4);
+        test_3.rescale(0.5,1);
+        int[][] test5 = {
+                {1},
+                {5}
+        };
+        Map test_5 = new Map(test5);
+        assertEquals(test_5,test_3);
+        int[][] test6 = {
+                {1,0,2,0},
+                {0,0,0,0},
+                {5,0,6,0},
+                {0,0,0,0}
+        };
+        Map test_6 = new Map(test6);
+        test_6.rescale(0.5,2);
+        int[][] test7 = {
+                {1,2},
+                {0,0},
+                {0,0},
+                {0,0},
+                {5,6},
+                {0,0},
+                {0,0},
+                {0,0},
+        };
+        Map test_7 = new Map(test7);
+        assertEquals(test_7,test_6);
+
+        test_7.rescale(2,0.5);
+
+        int[][] test8 = {
+                {1,0,2,0},
+                {0,0,0,0},
+                {5,0,6,0},
+                {0,0,0,0}
+        };
+        Map test_8 = new Map(test8);
+        assertEquals(test_8,test_7);
     }
-
-
 }

@@ -252,48 +252,42 @@ public class Map implements Map2D, Serializable{
 
     @Override
     public void rescale(double sx, double sy) {
-        double dwidth =  this.map[0].length * sx;
-        double dheight = this.map.length * sy;
-        int new_height = (int)dheight;
-        int new_width = (int)dwidth;
+        double dheight = this.getHeight()*sy;
+        double dwidth = this.getWidth()*sx;
+        int new_height = (int)(dheight);
+        int new_width = (int)(dwidth);
         int[][] arr = new int[new_height][new_width];
-        int minh = Math.min(new_height, this.getHeight());
-        int minw = Math.min(new_width, this.getWidth());
-        int jumpy,jumpx;
-        for(int i = 0; i < minh; i++){
-            for(int j = 0; j < minw; j++) {
-                int new_j=j;
-                int new_i=i;
-                if (new_height > minh) {
-                    new_i += (int)(sy-1);
-                    if(new_i<sy){
-                        new_i = 0;
-                    }
-                    jumpy = (int) (i*sy);
-                    if(jumpy>0){
-                        jumpy = i;
-                    }if ( jumpy>=this.map.length) {
-                        jumpy = this.map.length-1;
-                    }
-                }else
-                    jumpy = (int) (i*dheight);
-                if (new_width > minw) {
-                    new_j += (int)(sx-1);
-                    if(new_j<sx){
-                        new_j = 0;
-                    }
-                    jumpx = (int) (j * sx);
-                    if(jumpx > 0){
-                        jumpx = j;
-                    }if ( jumpx >=this.map[0].length) {
-                        jumpx = this.map[0].length-1;
-                    }
-                }else{
-                    jumpx = (int) (j*dwidth);
+        if(new_height >= this.getHeight() && (new_width >= this.getWidth())){
+            for(int i = 0; i < this.getHeight(); i++){
+                for(int j = 0; j < this.getWidth(); j++){
+                    arr[(int)(i*sy)][(int)(j*sx)] = this.map[i][j];
                 }
-                arr[new_i][new_j] = this.map[jumpy][jumpx];
             }
         }
+        if(new_height <= this.getHeight() && (new_width <= this.getWidth())){
+            for(int i = 0; i < new_height; i++){
+                for(int j = 0; j < new_width; j++){
+                    arr[i][j] = this.map[(int)(i/sy)][(int)(j/sx)];
+                }
+            }
+        }
+        if(new_height >= this.getHeight() && (new_width <= this.getWidth())){
+            for(int i = 0; i < this.getHeight(); i++){
+                for(int j = 0; j < new_width; j++){
+                    arr[(int)(i*sy)][j] = this.map[i][(int)(j/sx)];
+                }
+            }
+        }
+        if(new_height <= this.getHeight() && (new_width >= this.getWidth())){
+            for(int i = 0; i < new_height; i++){
+                for(int j = 0; j < this.getWidth(); j++){
+                    arr[i][(int)(j*sx)] = this.map[(int)(i/sy)][j];
+                }
+            }
+        }
+
+
+
         this.map = arr;
     }
 
