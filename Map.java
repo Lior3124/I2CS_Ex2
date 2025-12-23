@@ -250,7 +250,17 @@ public class Map implements Map2D, Serializable{
         }
     }
 
-    //need to explain
+    /**there are 4 different cases to rescale
+     *1.sx >1 and sy>1
+     *2.sx <1 and sy>1
+     *3.sx >1 and sy<1
+     *4.sx <1 and sy<1
+     * for each case we convert the existing values different
+     * if sx>1 than j will loop over from 0 to this map's height
+     * and will put this map's value in j to arr j*sx value, same with the sy
+     * if sx<1 than j will loop over from 0 to new map's j height
+     * and will put this map's value in j/sx in the new map's j height, same with sy
+     */
     @Override
     public void rescale(double sx, double sy) {
         double dheight = this.getHeight()*sy;
