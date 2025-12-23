@@ -47,9 +47,6 @@ class MapTest {
         assertEquals(_m0,_m1);
     }
 
-
-    /// //////////////////////////////////////////////////////////
-
     private final int[][] arr1 = {
             {0,0,0,0,0},
             {0,0,0,0,0},
@@ -579,5 +576,64 @@ class MapTest {
         };
         Map test_8 = new Map(test8);
         assertEquals(test_8,test_7);
+    }
+
+
+    @Test
+    void test_drawLine(){
+        Index2D p1 = new Index2D(0,0);
+        Index2D p2 = new Index2D(4,4);
+        map1.drawLine(p1,p2,1);
+        int[][] test1 = {
+                {1,0,0,0,0},
+                {0,1,0,0,0},
+                {0,0,1,0,0},
+                {0,0,0,1,0},
+                {0,0,0,0,1}
+        };
+        Map test_1 = new Map(test1);
+        assertEquals(test_1,map1);
+
+        //reset map 1
+        map1 = new Map(5,5,0);
+
+        map1.drawLine(p2,p1,1);
+        assertEquals(test_1,map1);
+
+        //reset map 1
+        map1 = new Map(5,5,0);
+
+        int[][] test2 = {
+                {1,0,0,0,0},
+                {0,0,0,0,0},
+                {0,0,0,0,0},
+                {0,0,0,0,0},
+                {0,0,0,0,0}
+        };
+        Map test_2 = new Map(test2);
+        map1.drawLine(p1,p1,1);
+        assertEquals(test_2,map1);
+
+        //reset map 1
+        map1 = new Map(5,5,0);
+
+        Index2D p3 = new Index2D(0,1);
+        Index2D p4 = new Index2D(2,4);
+        int [][] test3 = {
+                {0,0,0,0,0},
+                {1,0,0,0,0},
+                {0,1,0,0,0},
+                {0,1,0,0,0},
+                {0,0,1,0,0},
+        };
+        Map test_3 = new Map(test3);
+        map1.drawLine(p3,p4,1);
+        assertEquals(test_3,map1);
+
+        //reset map 1
+        map1 = new Map(5,5,0);
+
+        map1.drawLine(p4,p3,1);
+        assertEquals(test_3,map1);
     }
 }

@@ -250,6 +250,7 @@ public class Map implements Map2D, Serializable{
         }
     }
 
+    //need to explain
     @Override
     public void rescale(double sx, double sy) {
         double dheight = this.getHeight()*sy;
@@ -310,7 +311,34 @@ public class Map implements Map2D, Serializable{
 
     @Override
     public void drawLine(Pixel2D p1, Pixel2D p2, int color) {
+        int dx = Math.abs(p1.getX() - p2.getX());
+        int dy = Math.abs(p1.getY() - p2.getY());
+        double delta = (double) dy/dx;
 
+        if(p1.equals(p2)){
+            this.setPixel(p1, color);
+        }
+
+        if(dx>=dy && p1.getX()<p2.getX()){
+           for(int i = 0; i < dx+1; i++){
+               double y = p1.getY() + delta * (p1.getX()+i - p1.getX());
+               int f = Math.round((float) y);
+               this.setPixel(p1.getX()+i,f, color);
+           }
+        }
+
+        if(dx>=dy && p1.getX()>p2.getX()){drawLine(p2,p1,color);}
+
+        if(dx<dy && p1.getY()<p2.getY()){
+            double new_d = 1/delta;
+            for(int i = 0; i < dy+1; i++){
+                double x = new_d*(p1.getY()+i- p1.getY())+p1.getX();
+                int g = Math.round((float) x);
+                this.setPixel(g,p1.getY()+i, color);
+            }
+
+        }
+        if(dx<dy && p1.getY()>p2.getY()){drawLine(p2,p1,color);}
     }
 
     @Override
