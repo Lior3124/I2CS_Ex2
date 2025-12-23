@@ -1,5 +1,7 @@
 package assignments.Ex2;
 import java.io.Serializable;
+import java.util.Queue;
+import java.util.ArrayDeque;
 /**
  * This class represents a 2D map (int[w][h]) as a "screen" or a raster matrix or maze over integers.
  * This is the main class needed to be implemented.
@@ -10,8 +12,8 @@ import java.io.Serializable;
 public class Map implements Map2D, Serializable{
 
     // edit this class below
-
-    private int [][] map;
+    private int _width,_height;
+    private int [][] map =  new int[_width][_height];
 	/**
 	 * Constructs a w*h 2D raster map with an init value v.
 	 * @param w - the width of the underlying 2D array.
@@ -402,6 +404,7 @@ public class Map implements Map2D, Serializable{
 	/** 
 	 * Fills this map with the new color (new_v) starting from p.
 	 * https://en.wikipedia.org/wiki/Flood_fill
+     * call floodFill function
 	 */
 	public int fill(Pixel2D xy, int new_v,  boolean cyclic) {
         int old_v = this.getPixel(xy);
@@ -409,51 +412,76 @@ public class Map implements Map2D, Serializable{
 		return floodFill(xy,new_v,old_v,cyclic);
 	}
 
+    /**
+     * Uses BFS to set every old color that connects (either if cyclic or not) to the new color
+     * creates a queue of integers that represents x,y coordinates
+     * first we put the given Pixel2D point inside then we save the coordinates in x and y variables  adn remove it from the queue
+     * the for every neighbour we check if the current pixel(the one that we just removed) is inside and has the old color
+     * if it is we change it's color and add all it's neighbours that have the old color to the queue, and like that we continue to loop until the queue is empty
+     * and were done (after each color change we increment ans by 1 to count the total changed points)
+     * @param xy
+     * @param new_v
+     * @param old_v
+     * @param cyclic
+     * @return
+     */
     public int floodFill(Pixel2D xy, int new_v, int old_v, boolean cyclic) {
         int ans =0;
-            if(!(this.isInside(xy))){           // if point is outside map do nothing
-                return 0;
-            }
-            if(this.getPixel(xy) != old_v){     // if point doesn't have the same color do nothing
-                return 0;
-            }
-            if(this.getPixel(xy) == new_v){
-                return 0;                       //if point already is the new color do nothing
-            }
-            this.setPixel(xy, new_v);           // change the color of the point
-            ans ++;
-            //recursive call to each side(Up,Down,Left,Right)\
-            Index2D p_right = new Index2D(xy.getX()+1,xy.getY());
-            if(cyclic){
-                p_right = new Index2D((xy.getX()+1)%this.getWidth(),xy.getY());
-            }
-            if(this.isInside(p_right) &&  this.getPixel(p_right) == old_v) {
-                ans = ans + floodFill(p_right, new_v, old_v, cyclic);
+        Queue<int[]> q = new ArrayDeque<>();
+        q.add(new int[]{xy.getX(),xy.getY()});
+
+        while(!q.isEmpty()){
+            int [] curr = q.remove();
+            int  x = curr[0];
+            int y = curr[1];
+
+            Index2D ind = new Index2D(x,y);
+            if(this.isInside(ind) && this.getPixel(ind) == old_v) {
+                this.setPixel(ind, new_v);
+                ans++;
+
+                Index2D right = new Index2D(x + 1, y);
+                int[] right_arr = new int[]{x + 1, y};
+                if (cyclic) {
+                    right = new Index2D((x + 1) % this.map[0].length, y);
+                    right_arr = new int[]{(x + 1) % this.map[0].length, y};
+                }
+                if (this.isInside(right) && this.getPixel(right) == old_v) {
+                    q.add(right_arr);
+                }
+
+                Index2D left = new Index2D(x - 1, y);
+                int[] left_arr = new int[]{x - 1, y};
+                if (cyclic) {
+                    left = new Index2D((x - 1) % this.map[0].length, y);
+                    left_arr = new int[]{(x - 1) % this.map[0].length, y};
+                }
+                if (this.isInside(left) && this.getPixel(left) == old_v) {
+                    q.add(left_arr);
+                }
+
+                Index2D up = new Index2D(x, y + 1);
+                int[] up_arr = new int[]{x, y + 1};
+                if (cyclic) {
+                    up = new Index2D(x, (y + 1) % this.map.length);
+                    up_arr = new int[]{x, (y + 1) % this.map.length};
+                }
+                if (this.isInside(up) && this.getPixel(up) == old_v) {
+                    q.add(up_arr);
+                }
+
+                Index2D down = new Index2D(x, y - 1);
+                int[] down_arr = new int[]{x, y - 1};
+                if (cyclic) {
+                    down = new Index2D(x, (y - 1) % this.map.length);
+                    down_arr = new int[]{x, (y - 1) % this.map.length};
+                }
+                if (this.isInside(down) && this.getPixel(down) == old_v) {
+                    q.add(down_arr);
+                }
             }
 
-            Index2D p_left = new Index2D(xy.getX()-1,xy.getY());
-            if(cyclic){
-                p_left = new Index2D((xy.getX()-1+this.getWidth())%this.getWidth(),xy.getY());
-            }
-            if(this.isInside(p_left) &&  this.getPixel(p_left) == old_v) {
-                ans = ans + floodFill(p_left, new_v, old_v, cyclic);
-            }
-
-            Index2D p_up = new Index2D(xy.getX(),xy.getY()+1);
-            if(cyclic){
-                p_up = new Index2D(xy.getX(),(xy.getY()+1)%this.getHeight());
-            }
-            if(this.isInside(p_up) &&  this.getPixel(p_up) == old_v) {
-                ans = ans + floodFill(p_up, new_v, old_v, cyclic);
-            }
-
-            Index2D p_down = new Index2D(xy.getX(),xy.getY()-1);
-            if(cyclic){
-                p_down = new Index2D(xy.getX(),(xy.getY()-1+this.getHeight())%this.getHeight());
-            }
-            if(this.isInside(p_down) &&  this.getPixel(p_down) == old_v) {
-                ans = ans + floodFill(p_down, new_v, old_v, cyclic);
-            }
+        }
 
         return ans;
     }
