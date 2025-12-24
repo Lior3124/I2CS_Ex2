@@ -31,7 +31,7 @@ public class Map implements Map2D, Serializable{
 	public Map(int size) {
         this(size,size, 0);
     }
-	
+
 	/**
 	 * Constructs a map from a given 2D array.
 	 * @param data - 2D array that will represent the Map
@@ -201,7 +201,7 @@ public class Map implements Map2D, Serializable{
         boolean ans = true;
         int height = this.map.length;
         int width = this.map[0].length;
-        if(p.getX()>width || p.getY()>height || p.getX()<0 || p.getY()<0){
+        if(p.getX()>=width || p.getY()>=height || p.getX()<0 || p.getY()<0){
             ans = false;
         }
         return ans;
@@ -401,7 +401,7 @@ public class Map implements Map2D, Serializable{
     }
 
 	@Override
-	/** 
+	/**
 	 * Fills this map with the new color (new_v) starting from p.
 	 * https://en.wikipedia.org/wiki/Flood_fill
      * call floodFill function
@@ -453,8 +453,8 @@ public class Map implements Map2D, Serializable{
                 Index2D left = new Index2D(x - 1, y);
                 int[] left_arr = new int[]{x - 1, y};
                 if (cyclic) {
-                    left = new Index2D((x - 1) % this.map[0].length, y);
-                    left_arr = new int[]{(x - 1) % this.map[0].length, y};
+                    left = new Index2D((x - 1+this.map[0].length) % this.map[0].length, y);
+                    left_arr = new int[]{(x - 1+this.map[0].length) % this.map[0].length, y};
                 }
                 if (this.isInside(left) && this.getPixel(left) == old_v) {
                     q.add(left_arr);
@@ -473,8 +473,8 @@ public class Map implements Map2D, Serializable{
                 Index2D down = new Index2D(x, y - 1);
                 int[] down_arr = new int[]{x, y - 1};
                 if (cyclic) {
-                    down = new Index2D(x, (y - 1) % this.map.length);
-                    down_arr = new int[]{x, (y - 1) % this.map.length};
+                    down = new Index2D(x, (y - 1+this.map.length) % this.map.length);
+                    down_arr = new int[]{x, (y - 1+this.map.length) % this.map.length};
                 }
                 if (this.isInside(down) && this.getPixel(down) == old_v) {
                     q.add(down_arr);
@@ -494,6 +494,38 @@ public class Map implements Map2D, Serializable{
 	public Pixel2D[] shortestPath(Pixel2D p1, Pixel2D p2, int obsColor, boolean cyclic) {
 		Pixel2D[] ans = null;  // the result.
 
+        //create a copy of the current map
+        Map copy = new Map(this.getWidth(),this.getHeight(),0);
+        for(int i=0;i<copy.getHeight();i++){
+            for(int j=0;j<copy.getWidth();j++){
+                copy.setPixel(j,i,this.getPixel(j,i));
+            }
+        }
+
+        //fill all the colors except obs color in the matrix to be -1 (-1 because then we count, and we don't want to get confused later on) and fills obscolor to be -2(for the same reason as -1)
+        for(int i =0; i<this.getHeight();i++){
+            for(int j =0; j<this.getWidth();j++) {
+                if (this.getPixel(j, i) != obsColor) {
+                    this.setPixel(j, i, -1);
+                }else{
+                    this.setPixel(j,i,-2);
+                }
+            }
+        }
+
+        int count =this.new_fill(p1,p2,cyclic);
+        if(count == -1 ){
+            return null;
+        }
+        ans = this.find_path(count,p2.getX(),p2.getY(),cyclic);
+        ans[0] = p1;
+
+        //copy the map from the copy made earlier
+        for(int i=0;i<copy.getHeight();i++){
+            for(int j=0;j<copy.getWidth();j++){
+                this.setPixel(j,i,copy.getPixel(j,i));
+            }
+        }
 		return ans;
 	}
 
@@ -505,4 +537,122 @@ public class Map implements Map2D, Serializable{
     }
 	////////////////////// Private Methods ///////////////////////
 
+    /**works the same as fill + flood fill, the only difference is that now we count each step in each path , by saving in the queue its coordinates with their count,
+    * and it returns the number of steps it did until it got to p2
+     * if it didn't make it to p2 return -1.
+     */
+    private int new_fill(Pixel2D p1,Pixel2D p2,boolean cyclic) {
+        int ans = 1;
+        Queue<int[]> q = new ArrayDeque<>();
+        q.add(new int[]{p1.getX(), p1.getY(), 0});
+        int count = 0;
+
+        while (!q.isEmpty()) {
+            int[] curr = q.remove();
+            int x = curr[0];
+            int y = curr[1];
+            count = curr[2];
+            Index2D newp = new Index2D(x, y);
+
+            if (this.getPixel(newp) == -1 && this.isInside(newp)) {
+                this.setPixel(x, y, count);
+                count++;
+
+                if(newp.equals(p2)){
+                    return count-1;
+                }
+
+                Index2D right = new Index2D(x + 1, y);
+                int[] right_arr = new int[]{x + 1, y,count};
+                if (cyclic) {
+                    right = new Index2D((x + 1) % this.map[0].length, y);
+                    right_arr = new int[]{(x + 1) % this.map[0].length, y,count};
+                }
+                if (this.isInside(right) && this.getPixel(right) == -1) {
+                    q.add(right_arr);
+                }
+
+                Index2D left = new Index2D(x - 1, y);
+                int[] left_arr = new int[]{x - 1, y,count};
+                if (cyclic) {
+                    left = new Index2D((x - 1+this.map[0].length) % this.map[0].length, y);
+                    left_arr = new int[]{(x - 1+this.map[0].length) % this.map[0].length, y,count};
+                }
+                if (this.isInside(left) && this.getPixel(left) == -1) {
+                    q.add(left_arr);
+                }
+
+                Index2D up = new Index2D(x, y + 1);
+                int[] up_arr = new int[]{x, y + 1,count};
+                if (cyclic) {
+                    up = new Index2D(x, (y + 1) % this.map.length);
+                    up_arr = new int[]{x, (y + 1) % this.map.length,count};
+                }
+                if (this.isInside(up) && this.getPixel(up) == -1) {
+                    q.add(up_arr);
+                }
+
+                Index2D down = new Index2D(x, y - 1);
+                int[] down_arr = new int[]{x, y - 1,count};
+                if (cyclic) {
+                    down = new Index2D(x, (y - 1+this.map.length) % this.map.length);
+                    down_arr = new int[]{x, (y - 1+this.map.length) % this.map.length,count};
+                }
+                if (this.isInside(down) && this.getPixel(down) == -1) {
+                    q.add(down_arr);
+
+                }
+            }
+        }
+        if(q.isEmpty()){
+            return -1;
+        }
+        return count-1;
+    }
+
+    /**
+     * finds the path of the map(from higher numbers to 0), gets the coordinates of the highest number and searches for a number -1 this numbers
+     * when it finds it add its coordinated to an array of Index2D continues until reaches 0
+     * if there is no path returns -1
+     * @param count - the highest number
+     * @param x - the x coordinate of the point with the highest number
+     * @param y - the y coordinate of the point with the highest number
+     * @param cyclic - is the matrix cyclic
+     * @return an array of Index2D with the path to reach from 0 to count
+     */
+    private Index2D[] find_path(int count, int x, int y, boolean cyclic){
+        Index2D[] arr =new Index2D[count+1];
+        Index2D p = new Index2D(x,y);
+
+        while(count !=0){
+
+            arr[count] = p;
+            count--;
+
+            Index2D right = new Index2D(p.getX() + 1, p.getY());
+            Index2D left = new Index2D(p.getX() - 1, p.getY());
+            Index2D up = new Index2D(p.getX(), p.getY() + 1);
+            Index2D down = new Index2D(p.getX(), p.getY() - 1);
+            if(cyclic){
+
+                right = new Index2D((p.getX() + 1) %this.getWidth(), p.getY());
+                left = new Index2D((p.getX() - 1 + this.getWidth()) %this.getWidth(), p.getY());
+                up = new Index2D(p.getX(), (p.getY() + 1) % this.getHeight());
+                down = new Index2D(p.getX(), (p.getY() - 1 + this.getHeight()) % this.getHeight());
+            }
+            if(this.isInside(right) && this.getPixel(right)==count){
+                p = right;
+            }
+            else if(this.isInside(left) && this.getPixel(left)==count){
+                p = left;
+            }
+            else if(this.isInside(up) && this.getPixel(up)==count){
+                p = up;
+            }
+            else if(this.isInside(down) && this.getPixel(down)==count){
+                p = down;
+            }
+        }
+        return arr;
+    }
 }

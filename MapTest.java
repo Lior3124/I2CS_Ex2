@@ -636,4 +636,88 @@ class MapTest {
         map1.drawLine(p4,p3,1);
         assertEquals(test_3,map1);
     }
+
+    /**
+     * Test shortestPath when not cyclic
+     */
+    @Test
+    void shortestPath_notcyclic(){
+        int[][] test1 = {
+                {0,0,0,0,0},
+                {0,1,1,1,0},
+                {0,1,1,1,0},
+                {0,0,0,0,0},
+                {0,0,0,0,0}
+        };
+        Map test_1 = new Map(test1);
+        Index2D p1 = new Index2D(2,0);
+        Index2D p2 = new Index2D(2,3);
+
+        Pixel2D[] ans = test_1.shortestPath(p1,p2,1,false);
+
+        Pixel2D[] expected = new Pixel2D[8];
+        expected[0] = p1;
+        expected[1] = new Index2D(3,0);
+        expected[2] = new Index2D(4,0);
+        expected[3] = new Index2D(4,1);
+        expected[4] = new Index2D(4,2);
+        expected[5] = new Index2D(4,3);
+        expected[6] = new Index2D(3,3);
+        expected[7] = p2;
+        assertEquals(expected[0],ans[0]);
+        assertEquals(expected[1],ans[1]);
+        assertEquals(expected[2],ans[2]);
+        assertEquals(expected[3],ans[3]);
+        assertEquals(expected[4],ans[4]);
+        assertEquals(expected[5],ans[5]);
+        assertEquals(expected[6],ans[6]);
+        assertEquals(expected[7],ans[7]);
+    }
+
+    /**
+     * Test shortestPath when cyclic
+     */
+    @Test
+    void shortestPath_cyclic() {
+        int[][] test1 = {
+                {0, 0, 0, 1, 0},
+                {0, 1, 1, 1, 0},
+                {0, 1, 0, 1, 0},
+                {0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0}
+        };
+        Map test_1 = new Map(test1);
+        Index2D p1 = new Index2D(2, 0);
+        Index2D p2 = new Index2D(2, 2);
+
+        Pixel2D[] ans = test_1.shortestPath(p1, p2, 1, true);
+
+        Pixel2D[] expected = new Pixel2D[8];
+        expected[0] = p1;
+        expected[1] = new Index2D(2, 4);
+        expected[2] = new Index2D(2, 3);
+        expected[3] = new Index2D(2, 2);
+        assertEquals(expected[0], ans[0]);
+        assertEquals(expected[1], ans[1]);
+        assertEquals(expected[2], ans[2]);
+        assertEquals(expected[3], ans[3]);
+    }
+
+    @Test
+    void shortestPath_null(){
+        int[][] test1 = {
+                {0, 0, 0, 1, 0},
+                {1, 1, 1, 1, 1},
+                {0, 1, 0, 1, 0},
+                {0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0}
+        };
+        Map test_1 = new Map(test1);
+        Index2D p1 = new Index2D(2, 0);
+        Index2D p2 = new Index2D(2, 2);
+        Pixel2D[] ans = test_1.shortestPath(p1, p2, 1, false);
+        assertNull(ans);
+    }
+
+
 }
