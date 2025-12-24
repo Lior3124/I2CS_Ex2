@@ -539,9 +539,39 @@ public class Map implements Map2D, Serializable{
 		return ans;
 	}
 
+
+    /**
+     * first the function creates a copy of this map(matrix) adn then we loop over all the points on the map and calculate using sortest_path the shortest_path to each of the points
+     * shortest_path returns an array with path so we write on each point the length of the array-1, and if there is no path then sortest_path returns -1 and 01 is written
+     * @param start starting point
+     * @param obsColor the color representing obstacles
+     * @param cyclic is the matrix cyclic
+     * @return a new map with distance from start to each point written on each point(if not reachable -1 is written)
+     */
     @Override
     public Map2D allDistance(Pixel2D start, int obsColor, boolean cyclic) {
         Map2D ans = null;  // the result.
+        Pixel2D[] pixel_arr = null;
+        Index2D end = null;
+        //create a copy of the current map
+        ans = new Map(this.getWidth(),this.getHeight(),0);
+        for(int i=0;i<ans.getHeight();i++){
+            for(int j=0;j<ans.getWidth();j++){
+                ans.setPixel(j,i,this.getPixel(j,i));
+            }
+        }
+
+        for(int i=0;i<ans.getHeight();i++){
+            for(int j=0;j<ans.getWidth();j++){
+                end = new Index2D(j,i);
+                pixel_arr = this.shortestPath(start,end,obsColor,cyclic);
+                if(pixel_arr == null){
+                    ans.setPixel(j,i,-1);
+                }else {
+                    ans.setPixel(j, i, pixel_arr.length-1);
+                }
+            }
+        }
 
         return ans;
     }

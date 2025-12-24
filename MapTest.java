@@ -730,5 +730,66 @@ class MapTest {
         assertNull(ans);
     }
 
+    /**
+     * Test allDistance for multiple cases (cyclic, not cyclic, everything is not accessible)
+     */
+    @Test
+    void allDistance(){
+        int[][] test1 = {
+                {0,0,0,0,0},
+                {0,1,1,1,0},
+                {0,1,1,1,0},
+                {0,0,0,0,0},
+                {0,0,0,0,0}
+        };
+        Map test_1 = new Map(test1);
+        Index2D p = new Index2D(0,0);
+
+        Map ans1  = null;
+        ans1 = (Map)test_1.allDistance(p,1,false);
+
+        int[][] expected1={
+                {0,1,2,3,4},
+                {1,-1,-1,-1,5},
+                {2,-1,-1,-1,6},
+                {3,4,5,6,7},
+                {4,5,6,7,8}
+        };
+        Map expected_1 = new Map(expected1);
+        assertEquals(expected_1,ans1);
+
+        Map ans2 = null;
+        ans2 = (Map)test_1.allDistance(p,1,true);
+
+        int[][] expected2={
+                {0,1,2,2,1},
+                {1,-1,-1,-1,2},
+                {2,-1,-1,-1,3},
+                {2,3,4,4,3},
+                {1,2,3,3,2}
+        };
+
+        int[][] test3 = {
+                {1,1,1,1,1},
+                {1,1,1,1,1},
+                {0,0,0,0,0},
+                {1,1,1,1,1},
+                {1,1,1,1,1}
+        };
+        Map test_3 = new Map(test3);
+        Map ans3 = null;
+        ans3 = (Map)test_3.allDistance(p,1,true);
+
+        int[][] expected3 = {
+                {-1,-1,-1,-1,-1},
+                {-1,-1,-1,-1,-1},
+                {-1,-1,-1,-1,-1},
+                {-1,-1,-1,-1,-1},
+                {-1,-1,-1,-1,-1}
+        };
+        Map expected_3 = new Map(expected3);
+        assertEquals(expected_3,ans3);
+    }
+
 
 }
