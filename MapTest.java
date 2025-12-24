@@ -475,6 +475,9 @@ class MapTest {
         assertEquals(2,num3);
     }
 
+    /**
+     * Test the fill function on a cyclic matrix
+     */
     @Test
     void test_fillCyclic(){
         int[][] test1 = {
@@ -496,6 +499,9 @@ class MapTest {
 
     }
 
+    /**
+     * Test the rescale function(test for 4 different cases)
+     */
     @Test
     void test_rescale(){
 
@@ -578,7 +584,9 @@ class MapTest {
         assertEquals(test_8,test_7);
     }
 
-
+    /**
+     * Test drawLine function, tests all the different cases that can happen
+     */
     @Test
     void test_drawLine(){
         Index2D p1 = new Index2D(0,0);
@@ -641,7 +649,7 @@ class MapTest {
      * Test shortestPath when not cyclic
      */
     @Test
-    void shortestPath_notcyclic(){
+    void shortestPath_notCyclic(){
         int[][] test1 = {
                 {0,0,0,0,0},
                 {0,1,1,1,0},
@@ -703,6 +711,9 @@ class MapTest {
         assertEquals(expected[3], ans[3]);
     }
 
+    /**
+     * Test shortestPath when there is no path,should return null
+     */
     @Test
     void shortestPath_null(){
         int[][] test1 = {
