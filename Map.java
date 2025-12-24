@@ -519,7 +519,13 @@ public class Map implements Map2D, Serializable{
 
         int count =this.new_fill(p1,p2,cyclic);
         if(count == -1 ){
-
+            //copy the map from the copy made earlier
+            for(int i=0;i<copy.getHeight();i++){
+                for(int j=0;j<copy.getWidth();j++){
+                    this.setPixel(j,i,copy.getPixel(j,i));
+                }
+            }
+            return null;
         }
         ans = this.find_path(count,p2.getX(),p2.getY(),cyclic);
         ans[0] = p1;
@@ -608,6 +614,7 @@ public class Map implements Map2D, Serializable{
                 }
             }
         }
+        //if the queue is empty and haven't returned anything then there is no path and return -1
         if(q.isEmpty()){
             return -1;
         }
@@ -629,10 +636,11 @@ public class Map implements Map2D, Serializable{
         Index2D p = new Index2D(x,y);
 
         while(count !=0){
-
+            //add the point we are currently looking at to the array
             arr[count] = p;
             count--;
 
+            //get left right up down based on if cyclic
             Index2D right = new Index2D(p.getX() + 1, p.getY());
             Index2D left = new Index2D(p.getX() - 1, p.getY());
             Index2D up = new Index2D(p.getX(), p.getY() + 1);
@@ -644,6 +652,7 @@ public class Map implements Map2D, Serializable{
                 up = new Index2D(p.getX(), (p.getY() + 1) % this.getHeight());
                 down = new Index2D(p.getX(), (p.getY() - 1 + this.getHeight()) % this.getHeight());
             }
+            //check if left right up down are the path if any of them are they are now p, the new point we look at.
             if(this.isInside(right) && this.getPixel(right)==count){
                 p = right;
             }
