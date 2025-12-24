@@ -490,6 +490,10 @@ public class Map implements Map2D, Serializable{
 	/**
 	 * BFS like shortest the computation based on iterative raster implementation of BFS, see:
 	 * https://en.wikipedia.org/wiki/Breadth-first_search
+     * creates a copy to this map because we want it to be the same at the end
+     * then fills al the colors that aren't obs color to be -1 and obs one to -2 so we don't get problems later on when counting
+     * after this we apply new_fill(see new fill documentation at private functions), then we apply find_path , if it finds path returns -1 then there is no path and return null
+     * if there is a path return an array of pixels representing the path (from p1 to p2).
 	 */
 	public Pixel2D[] shortestPath(Pixel2D p1, Pixel2D p2, int obsColor, boolean cyclic) {
 		Pixel2D[] ans = null;  // the result.
@@ -515,7 +519,7 @@ public class Map implements Map2D, Serializable{
 
         int count =this.new_fill(p1,p2,cyclic);
         if(count == -1 ){
-            return null;
+
         }
         ans = this.find_path(count,p2.getX(),p2.getY(),cyclic);
         ans[0] = p1;
