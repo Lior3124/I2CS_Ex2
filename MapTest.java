@@ -220,6 +220,10 @@ class MapTest {
         Index2D new_p1 = new Index2D(-1,0);
 
         assertFalse(map1.isInside(new_p1));
+
+        Index2D new_p2 = new Index2D(4,4);
+        assertFalse(new_map.isInside(new_p2));
+
     }
 
     /**
