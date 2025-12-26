@@ -1,4 +1,9 @@
 package assignments.Ex2;
+
+import java.io.File;
+import java.io.FileWriter;
+import java.util.Scanner;
+
 /**
  * Intro2CS_2026A
  * This class represents a Graphical User Interface (GUI) for Map2D.
@@ -58,33 +63,72 @@ public class Ex2_GUI {
     }
 
     /**
-     * @param mapFileName
-     * @return
+     * gets a file and turns the input in the file into a map
+     * @param mapFileName - the name of the file
+     * @return Map2D with the map that is inside the file
      */
     public static Map2D loadMap(String mapFileName) {
         Map2D ans = null;
-
+        try{
+            File f = new File(mapFileName);
+            Scanner s = new Scanner(f);
+            int width =0;
+            if(s.hasNextLine()){
+                String line = s.nextLine();
+                String[] split = line.split(" ");
+                width = split.length;
+            }
+            int height=1;
+            while(s.hasNextLine()){
+                s.nextLine();
+                height++;
+            }
+            s.close();
+            ans = new Map(height,width,0);
+            Scanner s2 = new Scanner(f);
+            for(int i=0;i<height;i++) {
+                for(int j=0;j<width;j++) {
+                    ans.setPixel(j,i,s2.nextInt());
+                }
+                s2.nextLine();
+            }
+            s2.close();
+        }catch(Exception e){
+            e.printStackTrace();
+        }
         return ans;
     }
 
     /**
-     *
-     * @param map
-     * @param mapFileName
+     * get a map and saves the map into a file with the given name
+     * @param map - Map2D the map we want to save into ourfile
+     * @param mapFileName - the name of the file
      */
     public static void saveMap(Map2D map, String mapFileName) {
-
+        try{
+            FileWriter fw = new FileWriter(mapFileName);
+            for(int i=0;i<map.getHeight();i++) {
+                for(int j=0;j<map.getWidth();j++) {
+                    fw.write(map.getPixel(j,i)+" ");
+                }
+                fw.write("\n");
+            }
+            fw.close();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
 
     }
     public static void main(String[] a) {
         String mapFile = "map.txt";
-        //Map2D map = loadMap(mapFile);
-        int [][] arr = {
+        int [][] arr = {        //red green blue orange black different blue
                 {-65536,-16711936,-16776961},
                 {-23296,1,-65281}
         };
         Map2D map = new Map(arr);
-        drawMap(map);
+        saveMap(map, mapFile);
+        Map2D map2 = loadMap(mapFile);
+        drawMap(map2);
     }
     /// ///////////// Private functions ///////////////
 }
