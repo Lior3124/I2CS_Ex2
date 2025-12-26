@@ -6,7 +6,7 @@ This is assigment #2 at Ariel University, School of Computer Science, 2026.
 
 The assigment focuses on the introduction of object Oriented Programming,using 2D array as a representation of maps or mazes.
 
-The assigment has 3 main Algorithms which are base of Breadth First Search(BFS).
+The assigment has 3 main Algorithms which are based of Breadth First Search(BFS).
 
 ## ***Files***
 
