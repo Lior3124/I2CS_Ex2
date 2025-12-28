@@ -119,6 +119,16 @@ The assigment has 3 main Algorithms which are based of Breadth First Search(BFS)
 
     3. saveMap(Map2D map, String mapFileName) - saves a given map in a file(if no file names like given creates one).
 
+## ***BFS EXPLANATION***
+    BFS(Breadth-First Search) is an algorithm used to traverse or search, It explores nodes level by level, meaning it visits the nodes itself then it's neighbours and then their neighbours.
+    In the assigment i used BFS with queue, it works by:
+    1. puting the starting node in the queue 
+    2. while the queue isn't empty 
+        A. remove the front node
+        B. visit it
+        C. add all it's neighbors(unvisited neighbours)
+        D. mark neighbors visited
+
 ## ***Result***
 __This is the gui after all the functions have been written and completed,
 given the map__
